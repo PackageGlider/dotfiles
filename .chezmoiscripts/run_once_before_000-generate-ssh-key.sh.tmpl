@@ -2,21 +2,19 @@
 
 set -euo pipefail
 
+echo ""
+
 # Generate SSH key if it doesn't exist
 if [ ! -f "$HOME/.ssh/id_ed25519" ]; then
     echo "Generating SSH key..."
-    {{- $email := promptString "\nPlease enter your email:" -}}
-    {{- if eq $email "" -}}
-    {{- fail "Email cannot be empty." -}}
-    {{- end -}}
-    ssh-keygen -t ed25519 -f "$HOME/.ssh/id_ed25519" -C ".email"
+    ssh-keygen -t ed25519 -f "$HOME/.ssh/id_ed25519" -C "{{ .email }}"
     echo "SSH key generated."
 else
     echo "SSH key already exists."
 fi
 
-{{ $isDeveloper := promptBool "\nAre you a member of the Jedsy software team? y/N" false -}}
-{{- if $isDeveloper -}}
+echo ""
+{{ if .isDeveloper -}}
 echo "Please add the following public ssh key to your GitHub account and send your account name to an admin:"
 {{- else -}}
 echo "Please send the following public key to the Jedsy software team:"

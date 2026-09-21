@@ -1,0 +1,16 @@
+{{- $email := promptStringOnce . "email" "\n\nWhat is your email address" -}}
+{{- if eq $email "" -}}
+{{- fail "Email cannot be empty." -}}
+{{- end -}}
+
+{{- $choices := list "operator" "developer" -}}
+{{- $setupType := promptChoiceOnce . "setupType" "What type of computer is this" $choices -}}
+
+data:
+  email: {{ $email | quote }}
+  setupType: {{ $setupType | quote }}
+
+  # Deduced values
+  isJedsyEmployee: {{ $email | regexMatch ".*@jedsy\\.com" }}
+  isOperator: {{ eq $setupType "operator" }}
+  isDeveloper: {{ eq $setupType "developer" }}
